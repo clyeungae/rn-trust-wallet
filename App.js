@@ -6,7 +6,7 @@
  * @flow strict-local
  */
 
-import React from 'react';
+import React, {useState} from 'react';
 import type {Node} from 'react';
 import {
   SafeAreaView,
@@ -16,8 +16,11 @@ import {
   Text,
   useColorScheme,
   View,
+  NativeModules,
+  Button,
 } from 'react-native';
 
+const {RNTrustWallet} = NativeModules;
 import {
   Colors,
   DebugInstructions,
@@ -30,6 +33,7 @@ import {
  * LTI update could not be added via codemod */
 const Section = ({children, title}): Node => {
   const isDarkMode = useColorScheme() === 'dark';
+
   return (
     <View style={styles.sectionContainer}>
       <Text
@@ -55,42 +59,30 @@ const Section = ({children, title}): Node => {
 };
 
 const App: () => Node = () => {
+  const [mnemonic, setMnemonic] = useState();
+  const [address, setAddress] = useState();
   const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {
+    justifyContent: 'center',
+    flex: 1,
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
 
   return (
     <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
+      <Text>mnemonic:</Text>
+      <Text>{mnemonic}</Text>
+      <Text>address:</Text>
+      <Text>{address}</Text>
+      <Button
+        title="generate"
+        onPress={async () => {
+          const [m, a] = await RNTrustWallet.generateMnemonic();
+          setMnemonic(m);
+          setAddress(a);
+        }}
       />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.js</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
     </SafeAreaView>
   );
 };
