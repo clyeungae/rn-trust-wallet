@@ -277,6 +277,8 @@ dependencies {
     } else {
         implementation jscFlavor
     }
+
+    implementation "com.trustwallet:wallet-core:3.0.9"
 }
 
 if (isNewArchitectureEnabled()) {
