@@ -38,6 +38,8 @@ target 'test' do
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
+  pod 'TrustWalletCore'
+
   target 'testTests' do
     inherit! :complete
     # Pods for testing
@@ -50,7 +52,7 @@ target 'test' do
       # necessary for Mac Catalyst builds
       :mac_catalyst_enabled => false
     )
-    fix_hermes('test');
+    fix_hermes('test')
     __apply_Xcode_12_5_M1_post_install_workaround(installer)
   end
 end
